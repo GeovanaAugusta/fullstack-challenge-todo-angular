@@ -1,17 +1,1 @@
-<section>
-    <h1>Todo List</h1>
-
-    <input [(ngModel)]="taskName" placeholder="Adicione uma nova tarefa" />
-    <button (click)="addTask()">{{ isEditing ? 'Atualizar' : 'Adicionar' }}
-        Tarefa</button>
-
-    <ul>
-        <li *ngFor="let task of searchTasks()">
-            {{ task.name }}
-            <button (click)="editTask(task)">Editar</button>
-            <button (click)="deleteTask(task.id)">Excluir</button>
-        </li>
-    </ul>
-</section>
-
-<p-toast key="tst"></p-toast>
+<p>home works!</p>
