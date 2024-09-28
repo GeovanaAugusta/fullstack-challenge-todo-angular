@@ -6,7 +6,6 @@ import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-home',
@@ -81,5 +80,8 @@ export class HomeComponent {
     });
   }
 
+  searchTasks(): Task[] {
+    return this.tasks.filter(task => task.name.toLowerCase().includes(this.searchTerm.toLowerCase()));
+  }
 }
 
