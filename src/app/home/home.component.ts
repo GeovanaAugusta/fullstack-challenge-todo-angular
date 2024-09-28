@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
+import { TaskService } from '../services/tasks-service';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +24,7 @@ export class HomeComponent {
   editingTaskId: number | null = null;
   messages: any[] = [];
 
-  constructor(private messageService: MessageService) { }
+  constructor(private messageService: MessageService, private taskService: TaskService) { }
 
   ngOnInit(): void {
 
@@ -31,10 +32,35 @@ export class HomeComponent {
     if (storedTasks) {
       this.tasks = JSON.parse(storedTasks);
     }
+
+    this.getAllTasks();
   }
 
   saveTasksToLocalStorage(): void {
     localStorage.setItem('tasks', JSON.stringify(this.tasks));
+  }
+
+  getAllTasks():void {
+
+    this.taskService.allTasks().subscribe({
+      next: (response: any) => {
+        this.messageService.add({
+          severity: 'success',
+          detail: 'Tarefas carregadas com sucesso!',
+          key: 'tst',
+        });
+        this.tasks = response;
+      },
+      error: (err: any) => {
+        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          detail: 'Um erro ocorreu ao adicionar a tarefa!',
+          key: 'tst',
+        });
+      }
+    });
+
   }
 
   addTask(): void {
@@ -57,18 +83,62 @@ export class HomeComponent {
       this.tasks[taskIndex].name = newTask.name;
       this.isEditing = false;
       this.editingTaskId = null;
-
       this.messageService.add({
         severity: 'success',
         detail: 'Tarefa editada com sucesso!',
         key: 'tst',
       });
+
+      if (this.editingTaskId !== null) {
+        this.taskService.updateTask(newTask, this.editingTaskId).subscribe({
+          next: (response: any) => {
+            this.messageService.add({
+              severity: 'success',
+              detail: 'Tarefa editada com sucesso!',
+              key: 'tst',
+            });
+            const taskIndex = this.tasks.findIndex(task => task.id === this.editingTaskId);
+            this.tasks[taskIndex].name = newTask.name;
+            this.isEditing = false;
+            this.editingTaskId = null;
+            this.tasks = response;
+          },
+          error: (err: any) => {
+            console.error(err);
+            this.messageService.add({
+              severity: 'error',
+              detail: 'Um erro ocorreu ao editar a tarefa!',
+              key: 'tst',
+            });
+          }
+        });
+      }
+
     } else {
       this.tasks.push(newTask);
       this.messageService.add({
         severity: 'success',
         detail: 'Tarefa adicionada com sucesso!',
         key: 'tst',
+      });
+
+      this.taskService.addTask(newTask).subscribe({
+        next: (response: any) => {
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Tarefa adicionada com sucesso!',
+            key: 'tst',
+          });
+          this.tasks = response;
+        },
+        error: (err: any) => {
+          console.error(err);
+          this.messageService.add({
+            severity: 'error',
+            detail: 'Um erro ocorreu ao adicionar a tarefa!',
+            key: 'tst',
+          });
+        }
       });
     }
 
@@ -91,6 +161,28 @@ export class HomeComponent {
     });
 
     this.saveTasksToLocalStorage();
+
+    if (this.editingTaskId !== null) {
+      this.taskService.deleteTask(this.editingTaskId).subscribe({
+        next: (response: any) => {
+          this.tasks = response;
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Tarefa deletada com sucesso!',
+            key: 'tst',
+          });
+          this.tasks = response;
+        },
+        error: (err: any) => {
+          console.error(err);
+          this.messageService.add({
+            severity: 'error',
+            detail: 'Um erro ocorreu ao deletar a tarefa!',
+            key: 'tst',
+          });
+        }
+      });
+    }
   }
 
   searchTasks(): Task[] {
