@@ -1,3 +1,3 @@
 export const environment = {
-    urlBase: 'http://localhost:4200/api'
+    urlBase: 'http://18.230.82.81:8081/api'
 }
