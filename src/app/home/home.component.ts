@@ -23,9 +23,19 @@ export class HomeComponent {
   editingTaskId: number | null = null;
   messages: any[] = [];
 
-  constructor(
-    private messageService: MessageService,
-  ) { }
+  constructor(private messageService: MessageService) { }
+
+  ngOnInit(): void {
+
+    const storedTasks = localStorage.getItem('tasks');
+    if (storedTasks) {
+      this.tasks = JSON.parse(storedTasks);
+    }
+  }
+
+  saveTasksToLocalStorage(): void {
+    localStorage.setItem('tasks', JSON.stringify(this.tasks));
+  }
 
   addTask(): void {
     if (this.taskName.trim() === '') {
@@ -34,7 +44,7 @@ export class HomeComponent {
         detail: 'Por favor, insira uma descrição para a tarefa.',
         key: 'tst',
       });
-      return
+      return;
     }
 
     const newTask: Task = {
@@ -62,6 +72,7 @@ export class HomeComponent {
       });
     }
 
+    this.saveTasksToLocalStorage();
     this.taskName = '';
   }
 
@@ -78,10 +89,13 @@ export class HomeComponent {
       detail: 'Tarefa deletada com sucesso!',
       key: 'tst',
     });
+
+    this.saveTasksToLocalStorage();
   }
 
   searchTasks(): Task[] {
-    return this.tasks.filter(task => task.name.toLowerCase().includes(this.searchTerm.toLowerCase()));
+    return this.tasks.filter(task =>
+      task.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
   }
 }
-
