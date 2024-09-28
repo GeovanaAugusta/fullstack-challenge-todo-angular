@@ -29,7 +29,8 @@
     border-radius: 10px;
     margin-top: 30px;
     max-height: 500px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     .todo-title {
         font-size: 2rem;
@@ -116,11 +117,51 @@
     }
 }
 
+/* Estilo para a .todo-section e .task-list */
+.todo-section,
+.task-list {
+    /* Altura máxima e rolagem vertical */
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.todo-section::-webkit-scrollbar,
+.task-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.todo-section::-webkit-scrollbar-track,
+.task-list::-webkit-scrollbar-track {
+    background: #e0e0e0;
+    border-radius: 10px;
+}
+
+.todo-section::-webkit-scrollbar-thumb,
+.task-list::-webkit-scrollbar-thumb {
+    background-color: #4CAF50;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.todo-section::-webkit-scrollbar-thumb:hover,
+.task-list::-webkit-scrollbar-thumb:hover {
+    background-color: #45a049;
+}
+
+.todo-section,
+.task-list {
+    scrollbar-width: thin;
+    scrollbar-color: #4CAF50 #e0e0e0;
+}
+
+
 @media screen and (max-width: 1000px) {
     .todo-section {
         max-width: 640px;
         max-height: 500px;
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 }
 
@@ -128,7 +169,8 @@
     .todo-section {
         max-width: 80%;
         max-height: 400px;
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .task-input-container {
@@ -144,6 +186,4 @@
         }
 
     }
-
-
 }
