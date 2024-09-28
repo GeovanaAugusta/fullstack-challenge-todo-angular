@@ -117,10 +117,8 @@
     }
 }
 
-/* Estilo para a .todo-section e .task-list */
 .todo-section,
 .task-list {
-    /* Altura máxima e rolagem vertical */
     max-height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -153,6 +151,10 @@
 .task-list {
     scrollbar-width: thin;
     scrollbar-color: #4CAF50 #e0e0e0;
+}
+
+i {
+    font-size: 14px;
 }
 
 
