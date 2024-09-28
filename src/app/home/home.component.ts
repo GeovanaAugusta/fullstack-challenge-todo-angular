@@ -32,7 +32,7 @@ export class HomeComponent {
     if (this.taskName.trim() === '') {
       this.messageService.add({
         severity: 'error',
-        detail: 'Por favor, insira um nome para a tarefa.',
+        detail: 'Por favor, insira uma descrição para a tarefa.',
         key: 'tst',
       });
       return
@@ -48,8 +48,19 @@ export class HomeComponent {
       this.tasks[taskIndex].name = newTask.name;
       this.isEditing = false;
       this.editingTaskId = null;
+
+      this.messageService.add({
+        severity: 'success',
+        detail: 'Tarefa editada com sucesso!',
+        key: 'tst',
+      });
     } else {
       this.tasks.push(newTask);
+      this.messageService.add({
+        severity: 'success',
+        detail: 'Tarefa adicionada com sucesso!',
+        key: 'tst',
+      });
     }
 
     this.taskName = '';
@@ -63,10 +74,12 @@ export class HomeComponent {
 
   deleteTask(taskId: number): void {
     this.tasks = this.tasks.filter(task => task.id !== taskId);
+    this.messageService.add({
+      severity: 'success',
+      detail: 'Tarefa deletada com sucesso!',
+      key: 'tst',
+    });
   }
 
-  searchTasks(): Task[] {
-    return this.tasks.filter(task => task.name.toLowerCase().includes(this.searchTerm.toLowerCase()));
-  }
 }
 
