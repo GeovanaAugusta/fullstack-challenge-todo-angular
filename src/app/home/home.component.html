@@ -1,19 +1,29 @@
-<section>
-    <input [(ngModel)]="searchTerm" placeholder="Pesquisar tarefas" />
+<section class="search-section">
+    <input [(ngModel)]="searchTerm" placeholder="Pesquisar tarefas" class="search-input" />
 </section>
 
-<section>
-    <h1>Todo List</h1>
+<section class="todo-section">
+    <h1 class="todo-title">Todo List</h1>
 
-    <input [(ngModel)]="taskName" placeholder="Adicione uma nova tarefa" />
-    <button (click)="addTask()">{{ isEditing ? 'Atualizar' : 'Adicionar' }}
-        Tarefa</button>
+    <div class="task-input-container">
+        <input [(ngModel)]="taskName" placeholder="Adicione uma nova tarefa" class="task-input" />
+        <button (click)="addTask()" class="add-task-button">
+            {{ isEditing ? 'Atualizar' : 'Adicionar' }} Tarefa
+        </button>
+    </div>
 
-    <ul>
-        <li *ngFor="let task of searchTasks()">
-            {{ task.name }}
-            <button (click)="editTask(task)">Editar</button>
-            <button (click)="deleteTask(task.id)">Excluir</button>
+    <ul class="task-list">
+        <li *ngFor="let task of searchTasks()" class="task-item">
+            <span class="task-name">{{ task.name }}</span>
+
+            <div class="task-actions">
+                <button (click)="editTask(task)" class="action-button">
+                    <i class="pi pi-pencil"></i>
+                </button>
+                <button (click)="deleteTask(task.id)" class="action-button delete-button">
+                    <i class="pi pi-trash"></i>
+                </button>
+            </div>
         </li>
     </ul>
 </section>
