@@ -61,6 +61,12 @@ export class HomeComponent {
     this.editingTaskId = task.id;
   }
 
+  deleteTask(taskId: number): void {
+    this.tasks = this.tasks.filter(task => task.id !== taskId);
+  }
 
+  searchTasks(): Task[] {
+    return this.tasks.filter(task => task.name.toLowerCase().includes(this.searchTerm.toLowerCase()));
+  }
 }
 
