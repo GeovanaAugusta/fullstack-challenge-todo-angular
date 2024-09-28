@@ -1,6 +1,7 @@
 {
   "name": "front-todo-list-challenge",
   "version": "0.0.0",
+  "proxy": "https://teste.com",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
