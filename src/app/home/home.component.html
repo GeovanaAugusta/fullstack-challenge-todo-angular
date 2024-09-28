@@ -1,0 +1,31 @@
+<header class="search-header">
+    <input [(ngModel)]="searchTerm" placeholder="Pesquise pelo nome da tarefa" class="search-input" />
+</header>
+
+<section class="todo-section">
+    <h1 class="todo-title">Todo List</h1>
+
+    <div class="task-input-container">
+        <input [(ngModel)]="taskName" placeholder="Preencha com a tarefa" class="task-input" />
+        <button (click)="addTask()" class="add-task-button">
+            {{ isEditing ? 'Atualizar' : 'Adicionar' }} Tarefa
+        </button>
+    </div>
+
+    <ul class="task-list">
+        <li *ngFor="let task of searchTasks()" class="task-item">
+            <span class="task-name">{{ task.name }}</span>
+
+            <div class="task-actions">
+                <button (click)="editTask(task)" class="action-button">
+                    <i class="pi pi-pencil"></i>
+                </button>
+                <button (click)="deleteTask(task.id)" class="action-button delete-button">
+                    <i class="pi pi-trash"></i>
+                </button>
+            </div>
+        </li>
+    </ul>
+</section>
+
+<p-toast key="tst"></p-toast>
