@@ -1,12 +1,12 @@
-<section class="search-section">
-    <input [(ngModel)]="searchTerm" placeholder="Pesquisar tarefas" class="search-input" />
-</section>
+<header class="search-header">
+    <input [(ngModel)]="searchTerm" placeholder="Pesquise pelo nome da tarefa" class="search-input" />
+</header>
 
 <section class="todo-section">
     <h1 class="todo-title">Todo List</h1>
 
     <div class="task-input-container">
-        <input [(ngModel)]="taskName" placeholder="Adicione uma nova tarefa" class="task-input" />
+        <input [(ngModel)]="taskName" placeholder="Preencha com o nome da tarefa" class="task-input" />
         <button (click)="addTask()" class="add-task-button">
             {{ isEditing ? 'Atualizar' : 'Adicionar' }} Tarefa
         </button>
