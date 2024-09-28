@@ -6,7 +6,7 @@
     <h1 class="todo-title">Todo List</h1>
 
     <div class="task-input-container">
-        <input [(ngModel)]="taskName" placeholder="Preencha com o nome da tarefa" class="task-input" />
+        <input [(ngModel)]="taskName" placeholder="Preencha com a tarefa" class="task-input" />
         <button (click)="addTask()" class="add-task-button">
             {{ isEditing ? 'Atualizar' : 'Adicionar' }} Tarefa
         </button>
