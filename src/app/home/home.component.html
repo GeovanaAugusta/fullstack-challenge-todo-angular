@@ -66,7 +66,13 @@
             <input type="text" nz-input formControlName="nome" placeholder="Preencha com o nome do usuário" required />
             <input type="email" nz-input formControlName="email" placeholder="Preencha com o e-mail do usuário"
                 required />
-            <input type="text" nz-input formControlName="telefone" placeholder="Preencha com o telefone do usuário" />
+            <!-- <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched">
+                <small *ngIf="userForm.get('email')?.errors?.['email']">
+                    E-mail inválido, por favor verifique o formato.
+                </small>
+            </div> -->
+            <input type="text" mask="(00) 00000-0000" nz-input formControlName="telefone"
+                placeholder="Preencha com o telefone do usuário" />
 
             <nz-radio-group formControlName="preference">
                 <label nz-radio nzValue="SMS">SMS</label>
@@ -75,7 +81,7 @@
 
             <div class="flex-jb">
                 <button class="btn" nz-button [disabled]="userForm.invalid">Adicionar Usuário</button>
-                <button class="btn-back" (click)="addUser()">Voltar</button>
+                <button class="btn-back" nz-button (click)="addUser()">Voltar</button>
             </div>
         </form>
 

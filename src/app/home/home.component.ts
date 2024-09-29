@@ -15,14 +15,15 @@ import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HomeComponent, FormsModule, CommonModule, MessagesModule, MessageModule, ToastModule, NzButtonModule, NzInputModule, NzDatePickerModule, NzUploadModule, NzIconModule, NzSelectModule, ReactiveFormsModule, NzRadioModule],
+  imports: [HomeComponent, FormsModule, CommonModule, MessagesModule, MessageModule, ToastModule, NzButtonModule, NzInputModule, NzDatePickerModule, NzUploadModule, NzIconModule, NzSelectModule, ReactiveFormsModule, NzRadioModule, NgxMaskDirective],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  providers: [MessageService],
+  providers: [MessageService, provideNgxMask()],
 })
 export class HomeComponent {
   tasks: Task[] = [];
@@ -61,7 +62,7 @@ export class HomeComponent {
 
     this.userForm = this.fb.group({
       nome: ['', Validators.required],
-      email: ['', Validators.email],
+      email: ['', [Validators.required, Validators.email]],
       telefone: [''],
       preference: ['', Validators.required],
     });
@@ -166,7 +167,7 @@ export class HomeComponent {
     const newUser: User = {
       nome: this.userForm.value.nome.trim(),
       email: this.userForm.value.email.trim(),
-      telefone: this.userForm.value.telefone.trim() !== '' ? this.userForm.value.telefone.trim() : null,
+      telefone: this.userForm.value.telefone.trim().replace(/\D/g, '') !== '' ? `55${this.userForm.value.telefone.trim().replace(/\D/g, '')}` : null,
       notificationPreference: this.userForm.value.preference.trim(),
     };
 

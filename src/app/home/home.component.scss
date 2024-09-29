@@ -53,7 +53,7 @@
                     border-radius: 3px;
 
                     &:hover {
-                        background-color: #519839;
+                        background-color: #519839 !important;
                     }
                 }
 
@@ -61,7 +61,7 @@
                     background-color: #eb5a46;
 
                     &:hover {
-                        background-color: #c42716;
+                        background-color: #c42716 !important;
                     }
                 }
             }
@@ -107,10 +107,11 @@ form {
 .modal-title {
     border-bottom: 1px solid #e9ecef;
     height: 45px;
+    color: #074d76;
 }
 
 .close {
-    color: #aaa;
+    color: #074d76;
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -118,7 +119,7 @@ form {
 
 .close:hover,
 .close:focus {
-    color: black;
+    color: #54a4d3;
     text-decoration: none;
     cursor: pointer;
 }
@@ -180,6 +181,7 @@ button {
 .btn:hover {
     background-color: #026aa7 !important;
     color: white;
+    width: 100%;
 }
 
 .btn:disabled {
@@ -213,9 +215,9 @@ button {
 }
 
 .btn-back {
-    background-color: #0079bf;
-    color: white;
-    border: none;
+    background-color: transparent;
+    color: #0079bf;
+    border: 1px solid;
     border-radius: 5px;
     width: 100%;
     cursor: pointer;
@@ -224,12 +226,13 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
 }
 
 .btn-back:hover {
-    background-color: #026aa7 !important;
-    color: white;
+    background-color: transparent !important;
+    color: #026aa7 !important;
+    width: 100%;
+    border: 1px solid;
 }
 
 @media screen and (max-width: 632px) {
