@@ -17,9 +17,12 @@
 <div class="modal" *ngIf="isModalVisible">
     <div class="modal-content">
         <span class="close" (click)="closeModal()">&times;</span>
-        <h2 class="modal-title">{{ isEditing ? 'Editar Tarefa' : 'Adicionar Nova Tarefa' }}</h2>
+        <h2 class="modal-title">{{ isEditing ? 'Editar Tarefa' : ((users && users.length === 0 || addNewUser) ?
+            'Adicionar Novo
+            Usuário' : 'Adicionar Nova Tarefa') }}
+        </h2>
 
-        <form [formGroup]="taskForm" (ngSubmit)="saveTask()">
+        <form *ngIf="users && users.length > 0 && addNewUser === false" [formGroup]="taskForm" (ngSubmit)="saveTask()">
             <input type="text" nz-input formControlName="nome" placeholder="Nome da tarefa" required />
             <textarea rows="4" nz-input formControlName="descricao" placeholder="Descrição da tarefa"></textarea>
             <div class="flex-jb">
@@ -50,8 +53,30 @@
             <nz-select formControlName="usuarioId" nzPlaceHolder="Selecione um usuário" required>
                 <nz-option *ngFor="let user of users" [nzValue]="user.id" [nzLabel]="user.nome"></nz-option>
             </nz-select>
-            <button [disabled]="taskForm.invalid">{{ isEditing ? 'Salvar Alterações' :
+
+            <button class="btn-add" (click)="addUser()">+ Adicionar Usuário</button>
+
+            <button class="btn" nz-button [disabled]="taskForm.invalid">{{ isEditing ? 'Salvar Alterações' :
                 'Adicionar Tarefa' }}</button>
+        </form>
+
+        <form *ngIf="(users && users.length === 0 || addNewUser)" [formGroup]="userForm" (ngSubmit)="saveUsers()">
+            <h3 *ngIf="(users && users.length === 0)">Para adicionar uma Tarefa, adicione pelo menos um usuário para
+                vinculá-la</h3>
+            <input type="text" nz-input formControlName="nome" placeholder="Preencha com o nome do usuário" required />
+            <input type="email" nz-input formControlName="email" placeholder="Preencha com o e-mail do usuário"
+                required />
+            <input type="text" nz-input formControlName="telefone" placeholder="Preencha com o telefone do usuário" />
+
+            <nz-radio-group formControlName="preference">
+                <label nz-radio nzValue="SMS">SMS</label>
+                <label nz-radio nzValue="EMAIL">E-mail</label>
+            </nz-radio-group>
+
+            <div class="flex-jb">
+                <button class="btn" nz-button [disabled]="userForm.invalid">Adicionar Usuário</button>
+                <button class="btn-back" (click)="addUser()">Voltar</button>
+            </div>
         </form>
 
     </div>
