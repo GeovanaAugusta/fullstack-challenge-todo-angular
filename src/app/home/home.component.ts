@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormGroup, FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Task, User } from './home.component.interface';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
@@ -18,7 +18,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HomeComponent, FormsModule, CommonModule, MessagesModule, MessageModule, ToastModule, NzButtonModule, NzInputModule, NzDatePickerModule, NzUploadModule, NzIconModule, NzSelectModule,  ],
+  imports: [HomeComponent, FormsModule, CommonModule, MessagesModule, MessageModule, ToastModule, NzButtonModule, NzInputModule, NzDatePickerModule, NzUploadModule, NzIconModule, NzSelectModule, ReactiveFormsModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   providers: [MessageService],
@@ -47,10 +47,19 @@ export class HomeComponent {
   constructor(
     private messageService: MessageService,
     private taskService: TaskService,
-    private userService: UserService) { }
+    private userService: UserService,
+    private fb: FormBuilder) {
+    this.taskForm = this.fb.group({
+      nome: ['', Validators.required],
+      descricao: [''],
+      inicio: [''],
+      fim: [''],
+      usuarioId: ['', Validators.required],
+      anexos: this.fb.array([])
+    });
+  }
 
   ngOnInit(): void {
-
     const storedTasks = localStorage.getItem('tasks');
     if (storedTasks) {
       this.tasks = JSON.parse(storedTasks);
@@ -109,7 +118,8 @@ export class HomeComponent {
   }
 
   saveTask(): void {
-    if (!this.taskName.trim()) {
+    console.log(this.taskForm);
+    if (!this.taskForm.value.nome.trim()) {
       this.messageService.add({
         severity: 'error',
         detail: 'Por favor, insira um nome para a tarefa.',
@@ -120,12 +130,12 @@ export class HomeComponent {
 
     const newTask: Task = {
       id: this.taskId,
-      nome: this.taskName.trim(),
-      descricao: this.taskDesc,
-      inicio: this.taskBegin,
-      fim: this.taskEnd,
-      anexos: this.taskAnexos,
-      usuarioId: this.taskUsuarioId,
+      nome: this.taskForm.value.nome.trim(),
+      descricao: this.taskForm.value.descricao,
+      inicio: this.taskForm.value.inicio,
+      fim: this.taskForm.value.fim,
+      anexos: this.fileList.map(file => file.url).filter(url => url !== undefined) as string[],
+      usuarioId: this.taskForm.value.usuarioId,
     };
 
     if (this.isEditing) {
@@ -138,7 +148,7 @@ export class HomeComponent {
 
   addTask(newTask: Task): void {
     this.openModal();
-    if (this.taskName.trim() === '') {
+    if (!this.taskForm.value.nome.trim()) {
       this.messageService.add({
         severity: 'error',
         detail: 'Por favor, insira uma descrição para a tarefa.',
@@ -233,12 +243,40 @@ export class HomeComponent {
   editTask(task: Task): void {
     this.isEditing = true;
     this.taskId = task.id ? task.id : 0;
-    this.taskName = task.nome;
-    this.taskDesc = task.descricao;
-    this.taskBegin = task.inicio || '';
-    this.taskEnd = task.fim || '';
-    this.taskAnexos = task.anexos || [];
-    this.taskUsuarioId = task.usuarioId;
+
+    this.taskForm.patchValue({
+      id: task.id ? task.id : 0,
+      nome: task.nome,
+      descricao: task.descricao,
+      inicio: task.inicio,
+      fim: task.fim,
+      anexo: this.fileList.map(file => file.url).filter(url => url !== undefined) as string[],
+      usuarioId: task.usuarioId
+    });
+
+    console.log(this.taskForm);
+
+
+    if (task.anexos) {
+
+      this.fileList = task.anexos.map(url => {
+        const fileName = url.split('/').pop();
+        if (!fileName) {
+          throw new Error(`Nome do arquivo não encontrado para a URL: ${url}`);
+        }
+
+        return {
+          uid: url,  // Você pode usar um identificador único
+          name: fileName, // Nome do arquivo
+          url: url, // URL para pré-visualização
+          status: 'done' // O status pode ser 'done' para indicar que já foi carregado
+        };
+      });
+
+    }
+
+    console.log(this.taskForm);
+
     this.openModal();
   }
 
@@ -276,7 +314,13 @@ export class HomeComponent {
 
   // Modal
   openModal(task?: Task): void {
+    console.log(task);
+
     this.isModalVisible = true;
+    if (!this.isEditing) {
+      this.taskForm.reset();
+      this.fileList = [];
+    }
     if (task) {
       this.editTask(task);
     }
