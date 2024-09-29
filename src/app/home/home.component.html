@@ -22,25 +22,37 @@
         </h2>
 
         <form *ngIf="users && users.length > 0 && addNewUser === false" [formGroup]="taskForm" (ngSubmit)="saveTask()">
-            <input type="text" nz-input formControlName="nome" placeholder="Nome da tarefa" required />
-            <textarea rows="4" nz-input formControlName="descricao" placeholder="Descrição da tarefa"></textarea>
+            <input type="text" nz-input formControlName="nome" placeholder="Nome da tarefa"
+                [ngClass]="{'invalid': taskForm.get('nome')?.invalid && taskForm.get('nome')?.touched}" required />
+            <div class="invalid-message" *ngIf="taskForm.get('nome')?.invalid && taskForm.get('nome')?.touched">
+                <small *ngIf="taskForm.get('nome')?.errors?.['required']">O nome da tarefa é obrigatório.</small>
+            </div>
+
+            <textarea rows="4" nz-input formControlName="descricao" placeholder="Descrição da tarefa"
+                [ngClass]="{'invalid': taskForm.get('descricao')?.invalid && taskForm.get('descricao')?.touched}"></textarea>
+            <div class="invalid-message"
+                *ngIf="taskForm.get('descricao')?.invalid && taskForm.get('descricao')?.touched">
+                <small>Insira uma descrição válida.</small>
+            </div>
+
             <div class="flex-jb">
                 <nz-date-picker style="width: 50%;" nzFormat="dd/MM/yyyy" formControlName="inicio"
-                    nzPlaceHolder="Início"></nz-date-picker>
-                <nz-date-picker style="width: 50%;" nzFormat="dd/MM/yyyy" formControlName="fim"
-                    nzPlaceHolder="Fim"></nz-date-picker>
+                    nzPlaceHolder="Início"
+                    [ngClass]="{'invalid': taskForm.get('inicio')?.invalid && taskForm.get('inicio')?.touched}"></nz-date-picker>
+                <nz-date-picker style="width: 50%;" nzFormat="dd/MM/yyyy" formControlName="fim" nzPlaceHolder="Fim"
+                    [ngClass]="{'invalid': taskForm.get('fim')?.invalid && taskForm.get('fim')?.touched}"></nz-date-picker>
             </div>
-            <nz-upload nzType="drag" [nzMultiple]="false" (nzChange)="handleChange($event)"
-                nzAccept=".jpg,.jpeg,.png,.gif" [nzShowUploadList]="false" [nzFileList]="fileList">
 
+            <nz-upload nzType="drag" [nzMultiple]="false" (nzChange)="handleChange($event)"
+                nzAccept=".jpg,.jpeg,.png,.gif" [nzShowUploadList]="false" [nzFileList]="fileList"
+                [ngClass]="{'invalid': taskForm.get('anexos')?.invalid && taskForm.get('anexos')?.touched}">
                 <p class="ant-upload-drag-icon">
                     <span nz-icon nzType="inbox"></span>
                 </p>
-
                 <p class="ant-upload-text">Clique ou arraste a imagem para esta área para enviar</p>
             </nz-upload>
 
-            <div *ngIf="fileList.length > 0" class="file-preview">
+            <div class="invalid-message" *ngIf="fileList.length > 0" class="file-preview">
                 <div *ngFor="let file of fileList" class="file-item">
                     <img width="80px" height="80px" *ngIf="file && file.type && file.type.startsWith('image/')"
                         [src]="file.url || file.thumbUrl" alt="Preview" class="file-preview-image" />
@@ -49,14 +61,19 @@
                 </div>
             </div>
 
-            <nz-select formControlName="usuarioId" nzPlaceHolder="Selecione um usuário" required>
+            <nz-select formControlName="usuarioId" nzPlaceHolder="Selecione um usuário"
+                [ngClass]="{'invalid': taskForm.get('usuarioId')?.invalid && taskForm.get('usuarioId')?.touched}"
+                required>
                 <nz-option *ngFor="let user of users" [nzValue]="user.id" [nzLabel]="user.nome"></nz-option>
             </nz-select>
+            <div class="invalid-message"
+                *ngIf="taskForm.get('usuarioId')?.invalid && taskForm.get('usuarioId')?.touched">
+                <small>É necessário selecionar um usuário.</small>
+            </div>
 
             <button class="btn-add" (click)="addUser()">+ Adicionar Usuário</button>
-
-            <button class="btn" nz-button [disabled]="taskForm.invalid">{{ isEditing ? 'Salvar Alterações' :
-                'Adicionar Tarefa' }}</button>
+            <button class="btn" nz-button [disabled]="taskForm.invalid">{{ isEditing ? 'Salvar Alterações' : 'Adicionar
+                Tarefa' }}</button>
         </form>
 
         <form *ngIf="(users && users.length === 0 || addNewUser)" [formGroup]="userForm" (ngSubmit)="saveUsers()">
