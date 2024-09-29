@@ -1,5 +1,5 @@
 <div class="trello-board">
-    <div class="column" *ngFor="let status of ['Aguardando desenvolvimento', 'Em andamento', 'Em produção']">
+    <div class="column" *ngFor="let status of ['Aguardando desenvolvimento', 'Em andamento', 'Finalizado']">
         <h3>{{ status }}</h3>
         <div class="card" *ngFor="let task of filterTasksByStatus(status)">
             <h4>{{ task.nome }}</h4>
@@ -22,8 +22,12 @@
         <form [formGroup]="taskForm" (ngSubmit)="saveTask()">
             <input type="text" nz-input formControlName="nome" placeholder="Nome da tarefa" required />
             <textarea rows="4" nz-input formControlName="descricao" placeholder="Descrição da tarefa"></textarea>
-            <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="inicio" nzPlaceHolder="Início"></nz-date-picker>
-            <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="fim" nzPlaceHolder="Fim"></nz-date-picker>
+            <div class="flex-jb">
+                <nz-date-picker style="width: 50%;" nzFormat="dd/MM/yyyy" formControlName="inicio"
+                    nzPlaceHolder="Início"></nz-date-picker>
+                <nz-date-picker style="width: 50%;" nzFormat="dd/MM/yyyy" formControlName="fim"
+                    nzPlaceHolder="Fim"></nz-date-picker>
+            </div>
             <nz-upload nzType="drag" [nzMultiple]="false" (nzChange)="handleChange($event)"
                 nzAccept=".jpg,.jpeg,.png,.gif" [nzShowUploadList]="false" [nzFileList]="fileList">
 
@@ -46,7 +50,7 @@
             <nz-select formControlName="usuarioId" nzPlaceHolder="Selecione um usuário" required>
                 <nz-option *ngFor="let user of users" [nzValue]="user.id" [nzLabel]="user.nome"></nz-option>
             </nz-select>
-            <button nz-button nzType="primary" [disabled]="taskForm.invalid">{{ isEditing ? 'Salvar Alterações' :
+            <button [disabled]="taskForm.invalid">{{ isEditing ? 'Salvar Alterações' :
                 'Adicionar Tarefa' }}</button>
         </form>
 

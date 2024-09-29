@@ -78,7 +78,7 @@ export class HomeComponent {
       return this.tasks.filter(task => !task.inicio && !task.fim);
     } else if (status === 'Em andamento') {
       return this.tasks.filter(task => task.inicio && !task.fim);
-    } else if (status === 'Em produção') {
+    } else if (status === 'Finalizado') {
       return this.tasks.filter(task => task.fim);
     }
     return [];
@@ -133,6 +133,15 @@ export class HomeComponent {
     }
 
     const newTask: Task = {
+      nome: this.taskForm.value.nome.trim(),
+      descricao: this.taskForm.value.descricao,
+      inicio: this.taskForm.value.inicio,
+      fim: this.taskForm.value.fim,
+      anexos: this.fileList.map(file => file.url).filter(url => url !== undefined) as string[],
+      usuarioId: this.taskForm.value.usuarioId,
+    };
+
+    const updateTask: Task = {
       id: this.taskId,
       nome: this.taskForm.value.nome.trim(),
       descricao: this.taskForm.value.descricao,
@@ -143,7 +152,7 @@ export class HomeComponent {
     };
 
     if (this.isEditing) {
-      this.updateTask(newTask);
+      this.updateTask(updateTask);
     } else {
       this.addTask(newTask);
     }
@@ -162,6 +171,9 @@ export class HomeComponent {
     }
 
     this.openModal();
+
+    console.log(this.isEditing, this.editingTaskId);
+
 
     if (this.isEditing && this.editingTaskId !== null) {
       if (this.editingTaskId !== null) {
@@ -234,6 +246,8 @@ export class HomeComponent {
           key: 'tst',
         });
         this.getAllTasks();
+        this.isEditing = false;
+        this.editingTaskId = null
       },
       error: (err: any) => {
         console.error(err);
@@ -264,7 +278,6 @@ export class HomeComponent {
 
 
     if (task.anexos) {
-
       this.fileList = task.anexos.map(url => {
         const fileName = url.split('/').pop();
         if (!fileName) {
@@ -272,13 +285,12 @@ export class HomeComponent {
         }
 
         return {
-          uid: url,  // Você pode usar um identificador único
-          name: fileName, // Nome do arquivo
-          url: url, // URL para pré-visualização
-          status: 'done' // O status pode ser 'done' para indicar que já foi carregado
+          uid: url,
+          name: fileName,
+          url: url,
+          status: 'done'
         };
       });
-
     }
 
     console.log(this.taskForm);
