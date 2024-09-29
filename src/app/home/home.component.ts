@@ -14,11 +14,12 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HomeComponent, FormsModule, CommonModule, MessagesModule, MessageModule, ToastModule, NzButtonModule, NzInputModule, NzDatePickerModule, NzUploadModule, NzIconModule, NzSelectModule, ReactiveFormsModule],
+  imports: [HomeComponent, FormsModule, CommonModule, MessagesModule, MessageModule, ToastModule, NzButtonModule, NzInputModule, NzDatePickerModule, NzUploadModule, NzIconModule, NzSelectModule, ReactiveFormsModule, NzRadioModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   providers: [MessageService],
@@ -26,23 +27,23 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 export class HomeComponent {
   tasks: Task[] = [];
   users: User[] = [];
+  taskAnexos: [] = [];
+  fileList: NzUploadFile[] = [];
   taskName: string = '';
   searchTerm: string = '';
   isEditing: boolean = false;
   isAdding: boolean = false;
+  uploadSuccess: boolean = false;
+  addNewUser: boolean = false;
   editingTaskId: number | null = null;
-  messages: any[] = [];
-  taskDesc: string = '';
   isModalVisible: boolean = false;
   taskId: number = 0;
+  taskUsuarioId: number = 1;
   taskBegin: string = '';
   taskEnd: string = '';
-  taskAnexos: [] = [];
-  taskUsuarioId: number = 1;
-  uploadSuccess = false;
-  fileList: NzUploadFile[] = [];
+  taskDesc: string = '';
   taskForm: FormGroup;
-
+  userForm: FormGroup;
 
   constructor(
     private messageService: MessageService,
@@ -58,8 +59,12 @@ export class HomeComponent {
       anexos: this.fb.array([])
     });
 
-
-
+    this.userForm = this.fb.group({
+      nome: ['', Validators.required],
+      email: ['', Validators.email],
+      telefone: [''],
+      preference: ['', Validators.required],
+    });
   }
 
   ngOnInit(): void {
@@ -121,8 +126,6 @@ export class HomeComponent {
   }
 
   saveTask(): void {
-    console.log(this.taskForm.value, this.taskForm.valid);
-    console.log(this.taskForm);
     if (!this.taskForm.value.nome.trim()) {
       this.messageService.add({
         severity: 'error',
@@ -157,6 +160,41 @@ export class HomeComponent {
       this.addTask(newTask);
     }
     this.closeModal();
+  }
+
+  saveUsers(): void {
+    const newUser: User = {
+      nome: this.userForm.value.nome.trim(),
+      email: this.userForm.value.email.trim(),
+      telefone: this.userForm.value.telefone.trim() !== '' ? this.userForm.value.telefone.trim() : null,
+      notificationPreference: this.userForm.value.preference.trim(),
+    };
+
+    this.userService.addUser(newUser).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          detail: 'Usuário adicionado com sucesso!',
+          key: 'tst',
+        });
+        this.getAllUsers()
+      },
+      error: (err: any) => {
+        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          detail: 'Um erro ocorreu ao adicionar o usuário!',
+          key: 'tst',
+        });
+      }
+    });
+
+  }
+
+  addUser(): void {
+    this.addNewUser = !this.addNewUser;
+    console.log(this.addNewUser);
+
   }
 
   addTask(newTask: Task): void {
@@ -205,13 +243,6 @@ export class HomeComponent {
     } else {
       this.isAdding = true;
       this.tasks.push(newTask);
-      console.log(this.tasks);
-
-      this.messageService.add({
-        severity: 'success',
-        detail: 'Tarefa adicionada com sucesso!',
-        key: 'tst',
-      });
 
       this.taskService.addTask(newTask).subscribe({
         next: (response: any) => {
@@ -239,7 +270,7 @@ export class HomeComponent {
 
   updateTask(updatedTask: Task): void {
     this.taskService.updateTask(updatedTask, this.taskId).subscribe({
-      next: (response: any) => {
+      next: () => {
         this.messageService.add({
           severity: 'success',
           detail: 'Tarefa editada com sucesso!',
@@ -273,9 +304,6 @@ export class HomeComponent {
       anexo: this.fileList.map(file => file.url).filter(url => url !== undefined) as string[],
       usuarioId: task.usuarioId
     });
-
-    console.log(this.taskForm);
-
 
     if (task.anexos) {
       this.fileList = task.anexos.map(url => {
