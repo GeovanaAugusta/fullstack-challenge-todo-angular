@@ -7,27 +7,28 @@ import { environment } from '../environments/environment';
     providedIn: 'root'
 })
 export class TaskService {
-    private apiUrl = environment.urlBase;
+
+    private apiUrl = '/api/tasks';
 
     constructor(private http: HttpClient) { }
 
     searchTask(id: number): Observable<any> {
-        return this.http.get<any>(`${this.apiUrl}/tasks/buscar-por-id?id=${id}`);
+        return this.http.get<any>(`${this.apiUrl}/buscar-por-id?id=${id}`);
     }
 
     allTasks(): Observable<any> {
-        return this.http.get<any>(`${this.apiUrl}/tasks`);
+        return this.http.get<any>(`${this.apiUrl}`);
     }
 
     addTask(task: any): Observable<any> {
-        return this.http.post<any>(`${this.apiUrl}/tasks`, task);
+        return this.http.post<any>(`${this.apiUrl}`, task);
     }
 
     updateTask(task: any, id: number): Observable<any> {
-        return this.http.put<any>(`${this.apiUrl}/tasks/${id}`, task);
+        return this.http.put<any>(`${this.apiUrl}/${id}`, task);
     }
 
     deleteTask(id: number): Observable<any> {
-        return this.http.delete<any>(`${this.apiUrl}/tasks/${id}`);
+        return this.http.delete<any>(`${this.apiUrl}/${id}`);
     }
 }
