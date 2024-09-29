@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { initiaTask, Task } from './home.component.interface';
+import { Task } from './home.component.interface';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
@@ -77,8 +77,6 @@ export class HomeComponent {
         });
       }
     });
-
-    this.tasks = initiaTask;
     console.log(this.tasks);
   }
 
@@ -209,9 +207,9 @@ export class HomeComponent {
     this.taskId = task.id ? task.id : 0;
     this.taskName = task.nome;
     this.taskDesc = task.descricao;
-    this.taskInicio = task.inicio || ''; 
-    this.taskFim = task.fim || ''; 
-    this.taskAnexos = task.anexos || []; 
+    this.taskInicio = task.inicio || '';
+    this.taskFim = task.fim || '';
+    this.taskAnexos = task.anexos || [];
     this.taskUsuarioId = task.usuarioId;
     this.openModal();
   }
