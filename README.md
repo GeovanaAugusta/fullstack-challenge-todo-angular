@@ -36,7 +36,15 @@ Siga as etapas abaixo para configurar e rodar a aplicação localmente:
 
    O frontend estará acessível em `http://localhost:4200`.
 
-4. Certifique-se de que os microserviços de backend estão rodando nas seguintes portas. O frontend se comunicará com o backend através de um proxy configurado em `proxy.conf.json`.
+4. Certifique-se de que os microserviços de backend estão rodando nas seguintes portas:
+
+```
+- Serviço de Tarefas: 8000
+- Serviço de Usuários: 8001
+- Serviço de Notificações: 8002
+```
+
+O frontend se comunicará com o backend através de um proxy configurado em `proxy.conf.json`.
 
 ## Arquivo de Proxy
 
