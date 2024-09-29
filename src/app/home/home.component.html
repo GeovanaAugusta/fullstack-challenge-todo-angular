@@ -1,31 +1,31 @@
-<header class="search-header">
-    <input [(ngModel)]="searchTerm" placeholder="Pesquise pelo nome da tarefa" class="search-input" />
-</header>
-
-<section class="todo-section">
-    <h1 class="todo-title">Todo List</h1>
-
-    <div class="task-input-container">
-        <input [(ngModel)]="taskName" placeholder="Preencha com a tarefa" class="task-input" />
-        <button (click)="addTask()" class="add-task-button">
-            {{ isEditing ? 'Atualizar' : 'Adicionar' }} Tarefa
-        </button>
-    </div>
-
-    <ul class="task-list">
-        <li *ngFor="let task of searchTasks()" class="task-item">
-            <span class="task-name">{{ task.name }}</span>
-
-            <div class="task-actions">
-                <button (click)="editTask(task)" class="action-button">
-                    <i class="pi pi-pencil"></i>
-                </button>
-                <button (click)="deleteTask(task.id)" class="action-button delete-button">
-                    <i class="pi pi-trash"></i>
-                </button>
+<div class="trello-board">
+    <div class="column" *ngFor="let status of ['Aguardando desenvolvimento', 'Em andamento', 'Em produção']">
+        <h3>{{ status }}</h3>
+        <div class="card" *ngFor="let task of filterTasksByStatus(status)">
+            <h4>{{ task.nome }}</h4>
+            <p>{{ task.descricao }}</p>
+            <div class="actions">
+                <button (click)="editTask(task)"><i class="pi pi-pencil"></i></button>
+                <button (click)="deleteTask(task.id ? task.id : 0)"> <i class="pi pi-trash"></i></button>
             </div>
-        </li>
-    </ul>
-</section>
+        </div>
+        <button (click)="openModal()">+ Adicionar um cartão</button>
+    </div>
+</div>
 
-<p-toast key="tst"></p-toast>
+<div class="modal" *ngIf="isModalVisible">
+    <div class="modal-content">
+        <span class="close" (click)="closeModal()">&times;</span>
+        <h2>{{ isEditing ? 'Editar Tarefa' : 'Adicionar Nova Tarefa' }}</h2>
+
+        <input [(ngModel)]="taskName" placeholder="Nome da tarefa" required />
+        <textarea [(ngModel)]="taskDesc" placeholder="Descrição da tarefa" required></textarea>
+
+        <input [(ngModel)]="taskInicio" placeholder="Início da tarefa" type="date" />
+        <input [(ngModel)]="taskFim" placeholder="Fim da tarefa" type="date" />
+        <input [(ngModel)]="taskAnexos" placeholder="Anexos" />
+        <input [(ngModel)]="taskUsuarioId" placeholder="ID do Usuário" required />
+
+        <button (click)="saveTask()">{{ isEditing ? 'Salvar Alterações' : 'Adicionar Tarefa' }}</button>
+    </div>
+</div>
