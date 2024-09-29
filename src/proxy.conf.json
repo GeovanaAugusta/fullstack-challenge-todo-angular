@@ -1,8 +1,25 @@
-{
-    "/api/": {
-      "target": "http://localhost:8000",
-      "secure": false,
-      "changeOrigin": true,
-      "logLevel": "debug"
+[
+  {
+    "context": [
+      "/api/tasks"
+    ],
+    "target": "http://18.230.82.81:8081/api",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/tasks": "/tasks"
+    }
+  },
+  {
+    "context": [
+      "/api/users"
+    ],
+    "target": "http://18.229.131.117:8080/api",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/users": "/users"
     }
   }
+]
