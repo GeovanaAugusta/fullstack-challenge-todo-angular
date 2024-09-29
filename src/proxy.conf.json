@@ -1,6 +1,6 @@
 {
-  "/api/": {
-    "target": "http://18.230.82.81:8081",
+  "/api": {
+    "target": "http://18.230.82.81:8081/api",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
