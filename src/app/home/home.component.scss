@@ -41,8 +41,9 @@
 
             .actions {
                 display: flex;
-                justify-content: space-between;
+                justify-content: center;
                 margin-top: 10px;
+                gap: 30px;
 
                 button {
                     background-color: #5aac44;
@@ -246,7 +247,7 @@ button {
     color: red;
 }
 
-@media screen and (max-width: 632px) {
+@media screen and (max-width: 768px) {
     .trello-board {
         display: flex;
         flex-direction: column;
