@@ -18,8 +18,7 @@
     <div class="modal-content">
         <span class="close" (click)="closeModal()">&times;</span>
         <h2 class="modal-title">{{ isEditing ? 'Editar Tarefa' : ((users && users.length === 0 || addNewUser) ?
-            'Adicionar Novo
-            Usuário' : 'Adicionar Nova Tarefa') }}
+            'Adicionar Usuário' : 'Adicionar Tarefa') }}
         </h2>
 
         <form *ngIf="users && users.length > 0 && addNewUser === false" [formGroup]="taskForm" (ngSubmit)="saveTask()">
@@ -61,29 +60,46 @@
         </form>
 
         <form *ngIf="(users && users.length === 0 || addNewUser)" [formGroup]="userForm" (ngSubmit)="saveUsers()">
-            <h3 *ngIf="(users && users.length === 0)">Para adicionar uma Tarefa, adicione pelo menos um usuário para
-                vinculá-la</h3>
-            <input type="text" nz-input formControlName="nome" placeholder="Preencha com o nome do usuário" required />
-            <input type="email" nz-input formControlName="email" placeholder="Preencha com o e-mail do usuário"
-                required />
-            <!-- <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched">
-                <small *ngIf="userForm.get('email')?.errors?.['email']">
-                    E-mail inválido, por favor verifique o formato.
-                </small>
-            </div> -->
+            <h3 *ngIf="(users && users.length === 0)">
+                Para adicionar uma Tarefa, adicione pelo menos um usuário para vinculá-la
+            </h3>
+
+            <input type="text" nz-input formControlName="nome"
+                [ngClass]="{'invalid': userForm.get('nome')?.invalid && userForm.get('nome')?.touched}"
+                placeholder="Preencha com o nome do usuário" required />
+            <div class="invalid-message" *ngIf="userForm.get('nome')?.invalid && userForm.get('nome')?.touched">
+                <small *ngIf="userForm.get('nome')?.errors?.['required']">Nome é obrigatório.</small>
+            </div>
+
+            <input type="email" nz-input formControlName="email"
+                [ngClass]="{'invalid': userForm.get('email')?.invalid && userForm.get('email')?.touched}"
+                placeholder="Preencha com o e-mail do usuário" required />
+            <div class="invalid-message" *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched">
+                <small *ngIf="userForm.get('email')?.errors?.['required']">E-mail é obrigatório.</small>
+                <small *ngIf="userForm.get('email')?.errors?.['email']">E-mail inválido, por favor verifique o
+                    formato.</small>
+            </div>
+
             <input type="text" mask="(00) 00000-0000" nz-input formControlName="telefone"
+                [ngClass]="{'invalid': userForm.get('telefone')?.invalid && userForm.get('telefone')?.touched}"
                 placeholder="Preencha com o telefone do usuário" />
 
             <nz-radio-group formControlName="preference">
                 <label nz-radio nzValue="SMS">SMS</label>
                 <label nz-radio nzValue="EMAIL">E-mail</label>
             </nz-radio-group>
+            <div class="invalid-message"
+                *ngIf="userForm.get('preference')?.invalid && userForm.get('preference')?.touched">
+                <small *ngIf="userForm.get('preference')?.errors?.['required']">Escolha uma preferência de
+                    notificação.</small>
+            </div>
 
             <div class="flex-jb">
                 <button class="btn" nz-button [disabled]="userForm.invalid">Adicionar Usuário</button>
                 <button class="btn-back" nz-button (click)="addUser()">Voltar</button>
             </div>
         </form>
+
 
     </div>
 </div>

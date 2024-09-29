@@ -71,7 +71,9 @@
 }
 
 .modal {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: fixed;
     z-index: 1;
     left: 0;
@@ -99,7 +101,7 @@ form {
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 100%;
     max-width: 500px;
     border-radius: 8px;
 }
@@ -233,6 +235,15 @@ button {
     color: #026aa7 !important;
     width: 100%;
     border: 1px solid;
+}
+
+.invalid {
+    border: 1px solid red;
+}
+
+.invalid-message {
+    margin-top: -15px;
+    color: red;
 }
 
 @media screen and (max-width: 632px) {

@@ -91,7 +91,6 @@ export class HomeComponent {
   }
 
   // APIs call
-
   getAllUsers(): void {
     this.userService.allUsers().subscribe({
       next: (response: any) => {
@@ -178,7 +177,8 @@ export class HomeComponent {
           detail: 'Usuário adicionado com sucesso!',
           key: 'tst',
         });
-        this.getAllUsers()
+        this.getAllUsers();
+        this.userForm.reset();
       },
       error: (err: any) => {
         console.error(err);
@@ -194,6 +194,7 @@ export class HomeComponent {
 
   addUser(): void {
     this.addNewUser = !this.addNewUser;
+    this.userForm.reset();
     console.log(this.addNewUser);
 
   }
