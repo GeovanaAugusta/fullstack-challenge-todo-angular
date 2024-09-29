@@ -1,24 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Task } from './home.component.interface';
+import { FormGroup, FormsModule } from '@angular/forms';
+import { Task, User } from './home.component.interface';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { TaskService } from '../services/tasks-service';
 import { UserService } from '../services/users-service';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HomeComponent, FormsModule, CommonModule, MessagesModule, MessageModule, ToastModule],
+  imports: [HomeComponent, FormsModule, CommonModule, MessagesModule, MessageModule, ToastModule, NzButtonModule, NzInputModule, NzDatePickerModule, NzUploadModule, NzIconModule, NzSelectModule,  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   providers: [MessageService],
 })
 export class HomeComponent {
   tasks: Task[] = [];
+  users: User[] = [];
   taskName: string = '';
   searchTerm: string = '';
   isEditing: boolean = false;
@@ -28,10 +35,14 @@ export class HomeComponent {
   taskDesc: string = '';
   isModalVisible: boolean = false;
   taskId: number = 0;
-  taskInicio: string = '';
-  taskFim: string = '';
+  taskBegin: string = '';
+  taskEnd: string = '';
   taskAnexos: [] = [];
   taskUsuarioId: number = 1;
+  uploadSuccess = false;
+  fileList: NzUploadFile[] = [];
+  taskForm: FormGroup;
+
 
   constructor(
     private messageService: MessageService,
@@ -48,7 +59,6 @@ export class HomeComponent {
     this.getAllTasks();
     this.getAllUsers();
   }
-
 
   // Filters
   filterTasksByStatus(status: string): Task[] {
@@ -67,7 +77,7 @@ export class HomeComponent {
   getAllUsers(): void {
     this.userService.allUsers().subscribe({
       next: (response: any) => {
-        this.tasks = response;
+        this.users = response;
       },
       error: (err: any) => {
         console.error(err);
@@ -112,8 +122,8 @@ export class HomeComponent {
       id: this.taskId,
       nome: this.taskName.trim(),
       descricao: this.taskDesc,
-      inicio: this.taskInicio,
-      fim: this.taskFim,
+      inicio: this.taskBegin,
+      fim: this.taskEnd,
       anexos: this.taskAnexos,
       usuarioId: this.taskUsuarioId,
     };
@@ -225,13 +235,12 @@ export class HomeComponent {
     this.taskId = task.id ? task.id : 0;
     this.taskName = task.nome;
     this.taskDesc = task.descricao;
-    this.taskInicio = task.inicio || '';
-    this.taskFim = task.fim || '';
+    this.taskBegin = task.inicio || '';
+    this.taskEnd = task.fim || '';
     this.taskAnexos = task.anexos || [];
     this.taskUsuarioId = task.usuarioId;
     this.openModal();
   }
-
 
   deleteTask(taskId: number): void {
 
@@ -279,6 +288,24 @@ export class HomeComponent {
     this.taskDesc = '';
     this.isEditing = false;
     this.editingTaskId = null;
+  }
+
+  // Upload
+  handleChange(info: { fileList: NzUploadFile[] }): void {
+    let newFileList = [...info.fileList];
+
+    if (newFileList.length > 1) {
+      newFileList = [newFileList[newFileList.length - 1]];
+    }
+
+    this.fileList = newFileList.map(file => ({
+      ...file,
+      url: file.originFileObj ? URL.createObjectURL(file.originFileObj) : file.url
+    }));
+  }
+
+  removeFile(file: NzUploadFile): void {
+    this.fileList = this.fileList.filter(f => f.uid !== file.uid);
   }
 
 }
