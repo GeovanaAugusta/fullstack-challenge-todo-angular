@@ -38,9 +38,9 @@ Siga as etapas abaixo para configurar e rodar a aplicação localmente:
 
 4. Certifique-se de que os microserviços de backend estão rodando nas seguintes portas:
 
-- Serviço de Tarefas: `http://localhost:8000`
-- Serviço de Usuários: `http://localhost:8001`
-- Serviço de Notificações: `http://localhost:8002`
+- **Serviço de Tarefas**: `http://localhost:8000`
+- **Serviço de Usuários**: `http://localhost:8001`
+- **Serviço de Notificações**: `http://localhost:8002`
 
 O frontend se comunicará com o backend através de um proxy configurado em `proxy.conf.json`.
 
