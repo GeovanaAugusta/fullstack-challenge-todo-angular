@@ -16,18 +16,40 @@
 <div class="modal" *ngIf="isModalVisible">
     <div class="modal-content">
         <span class="close" (click)="closeModal()">&times;</span>
-        <h2>{{ isEditing ? 'Editar Tarefa' : 'Adicionar Nova Tarefa' }}</h2>
+        <h2 class="modal-title">{{ isEditing ? 'Editar Tarefa' : 'Adicionar Nova Tarefa' }}</h2>
 
-        <input [(ngModel)]="taskName" placeholder="Nome da tarefa" required />
-        <textarea [(ngModel)]="taskDesc" placeholder="Descrição da tarefa" required></textarea>
+        <form [formGroup]="taskForm" (ngSubmit)="saveTask()">
+            <input type="text" nz-input formControlName="nome" placeholder="Nome da tarefa" required />
+            <textarea rows="4" nz-input formControlName="descricao" placeholder="Descrição da tarefa"></textarea>
+            <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="inicio" nzPlaceHolder="Início"></nz-date-picker>
+            <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="fim" nzPlaceHolder="Fim"></nz-date-picker>
+            <nz-upload nzType="drag" [nzMultiple]="false" (nzChange)="handleChange($event)"
+                nzAccept=".jpg,.jpeg,.png,.gif" [nzShowUploadList]="false" [nzFileList]="fileList">
 
-        <input [(ngModel)]="taskInicio" placeholder="Início da tarefa" type="date" />
-        <input [(ngModel)]="taskFim" placeholder="Fim da tarefa" type="date" />
-        <input [(ngModel)]="taskAnexos" placeholder="Anexos" />
-        <input [(ngModel)]="taskUsuarioId" placeholder="ID do Usuário" required />
+                <p class="ant-upload-drag-icon">
+                    <span nz-icon nzType="inbox"></span>
+                </p>
 
-        <button (click)="saveTask()">{{ isEditing ? 'Salvar Alterações' : 'Adicionar Tarefa' }}</button>
+                <p class="ant-upload-text">Clique ou arraste a imagem para esta área para enviar</p>
+            </nz-upload>
+
+            <div *ngIf="fileList.length > 0" class="file-preview">
+                <div *ngFor="let file of fileList" class="file-item">
+                    <img width="80px" height="80px" *ngIf="file && file.type && file.type.startsWith('image/')"
+                        [src]="file.url || file.thumbUrl" alt="Preview" class="file-preview-image" />
+                    <span>{{ file.name }}</span>
+                    <button nz-button nzType="link" (click)="removeFile(file)"><i class="pi pi-trash"></i></button>
+                </div>
+            </div>
+            <nz-select formControlName="usuarioId" nzPlaceHolder="Selecione um usuário" required>
+                <nz-option *ngFor="let user of users" [nzValue]="user.id" [nzLabel]="user.nome"></nz-option>
+            </nz-select>
+            <button nz-button nzType="primary" [disabled]="taskForm.invalid">{{ isEditing ? 'Salvar Alterações' :
+                'Adicionar Tarefa' }}</button>
+        </form>
+
     </div>
 </div>
+
 
 <p-toast key="tst"></p-toast>
