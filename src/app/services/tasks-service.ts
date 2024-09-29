@@ -8,7 +8,7 @@ import { environment } from '../environments/environment';
 })
 export class TaskService {
 
-    private apiUrl = '/api/tasks';
+    private apiUrl = environment.urlBaseTasks;
 
     constructor(private http: HttpClient) { }
 
