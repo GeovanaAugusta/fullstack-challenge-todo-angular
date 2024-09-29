@@ -57,6 +57,9 @@ export class HomeComponent {
       usuarioId: ['', Validators.required],
       anexos: this.fb.array([])
     });
+
+
+
   }
 
   ngOnInit(): void {
@@ -118,6 +121,7 @@ export class HomeComponent {
   }
 
   saveTask(): void {
+    console.log(this.taskForm.value, this.taskForm.valid);
     console.log(this.taskForm);
     if (!this.taskForm.value.nome.trim()) {
       this.messageService.add({
@@ -147,7 +151,7 @@ export class HomeComponent {
   }
 
   addTask(newTask: Task): void {
-    this.openModal();
+
     if (!this.taskForm.value.nome.trim()) {
       this.messageService.add({
         severity: 'error',
@@ -156,6 +160,8 @@ export class HomeComponent {
       });
       return;
     }
+
+    this.openModal();
 
     if (this.isEditing && this.editingTaskId !== null) {
       if (this.editingTaskId !== null) {
@@ -350,6 +356,10 @@ export class HomeComponent {
 
   removeFile(file: NzUploadFile): void {
     this.fileList = this.fileList.filter(f => f.uid !== file.uid);
+  }
+
+  getNameById(id: number) {
+    return this.users.find(user => user.id === id)?.nome;
   }
 
 }

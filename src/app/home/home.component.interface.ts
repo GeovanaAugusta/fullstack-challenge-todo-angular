@@ -1,10 +1,12 @@
+import { NzUploadFile } from "ng-zorro-antd/upload";
+
 export interface Task {
   id?: number | undefined;
   nome: string;
   descricao: string;
   inicio: string,
   fim?: string | null,
-  anexos?: [],
+  anexos?: string[],
   usuarioId: number
 }
 

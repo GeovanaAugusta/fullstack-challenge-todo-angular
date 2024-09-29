@@ -4,6 +4,7 @@
         <div class="card" *ngFor="let task of filterTasksByStatus(status)">
             <h4>{{ task.nome }}</h4>
             <p>{{ task.descricao }}</p>
+            <p>Atribuído para: {{ getNameById(task.usuarioId) }}</p>
             <div class="actions">
                 <button (click)="editTask(task)"><i class="pi pi-pencil"></i></button>
                 <button (click)="deleteTask(task.id ? task.id : 0)"> <i class="pi pi-trash"></i></button>
@@ -41,6 +42,7 @@
                     <button nz-button nzType="link" (click)="removeFile(file)"><i class="pi pi-trash"></i></button>
                 </div>
             </div>
+
             <nz-select formControlName="usuarioId" nzPlaceHolder="Selecione um usuário" required>
                 <nz-option *ngFor="let user of users" [nzValue]="user.id" [nzLabel]="user.nome"></nz-option>
             </nz-select>
