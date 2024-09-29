@@ -7,6 +7,7 @@ import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { TaskService } from '../services/tasks-service';
+import { UserService } from '../services/users-service';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +33,10 @@ export class HomeComponent {
   taskAnexos: [] = [];
   taskUsuarioId: number = 1;
 
-  constructor(private messageService: MessageService, private taskService: TaskService) { }
+  constructor(
+    private messageService: MessageService,
+    private taskService: TaskService,
+    private userService: UserService) { }
 
   ngOnInit(): void {
 
@@ -42,6 +46,7 @@ export class HomeComponent {
     }
 
     this.getAllTasks();
+    this.getAllUsers();
   }
 
 
@@ -58,21 +63,34 @@ export class HomeComponent {
   }
 
   // APIs call
-  getAllTasks(): void {
-    this.taskService.allTasks().subscribe({
+
+  getAllUsers(): void {
+    this.userService.allUsers().subscribe({
       next: (response: any) => {
-        this.messageService.add({
-          severity: 'success',
-          detail: 'Tarefas carregadas com sucesso!',
-          key: 'tst',
-        });
         this.tasks = response;
       },
       error: (err: any) => {
         console.error(err);
         this.messageService.add({
           severity: 'error',
-          detail: 'Um erro ocorreu ao adicionar a tarefa!',
+          detail: 'Um erro ocorreu ao carregar os usuários!',
+          key: 'tst',
+        });
+      }
+    });
+    console.log(this.tasks);
+  }
+
+  getAllTasks(): void {
+    this.taskService.allTasks().subscribe({
+      next: (response: any) => {
+        this.tasks = response;
+      },
+      error: (err: any) => {
+        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          detail: 'Um erro ocorreu ao carregar as tarefas!',
           key: 'tst',
         });
       }
