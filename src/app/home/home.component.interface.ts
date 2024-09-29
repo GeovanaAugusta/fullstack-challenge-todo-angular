@@ -7,3 +7,11 @@ export interface Task {
   anexos?: [],
   usuarioId: number
 }
+
+export interface User {
+  id: number,
+  nome: string;
+  telefone: string | null,
+  email: string,
+  notificationPreference: string
+}
