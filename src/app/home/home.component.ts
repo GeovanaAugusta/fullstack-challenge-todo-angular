@@ -217,8 +217,8 @@ export class HomeComponent {
 
   deleteTask(taskId: number): void {
 
-    if (this.editingTaskId !== null) {
-      this.taskService.deleteTask(this.editingTaskId).subscribe({
+    if (taskId !== null) {
+      this.taskService.deleteTask(taskId).subscribe({
         next: (response: any) => {
           this.tasks = response;
           this.messageService.add({
@@ -227,6 +227,7 @@ export class HomeComponent {
             key: 'tst',
           });
           this.tasks = response;
+          this.getAllTasks();
         },
         error: (err: any) => {
           console.error(err);
