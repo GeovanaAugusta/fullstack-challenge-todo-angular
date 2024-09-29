@@ -6,8 +6,8 @@ import { environment } from '../environments/environment';
 @Injectable({
     providedIn: 'root'
 })
-export class UserService {
-    private apiUrl = environment.urlBaseUsers;
+export class NotificationService {
+    private apiUrl = environment.urlBaseNotifications;
 
     constructor(private http: HttpClient) { }
 
@@ -24,6 +24,6 @@ export class UserService {
             .set('subject', subject)
             .set('message', message);
 
-        return this.http.post<any>(`${this.apiUrl}/notifications/email`, null, { params });
+        return this.http.post<any>(`${this.apiUrl}/email`, null, { params });
     }
 }

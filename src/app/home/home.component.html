@@ -7,7 +7,7 @@
             <p>Atribuído para: {{ getNameById(task.usuarioId) }}</p>
             <div class="actions">
                 <button (click)="editTask(task)"><i class="pi pi-pencil"></i></button>
-                <button (click)="deleteTask(task.id ? task.id : 0)"> <i class="pi pi-trash"></i></button>
+                <button (click)="deleteTask(task)"> <i class="pi pi-trash"></i></button>
             </div>
         </div>
         <button (click)="openModal()">+ Adicionar um cartão</button>

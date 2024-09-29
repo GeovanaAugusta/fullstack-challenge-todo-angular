@@ -16,6 +16,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { NotificationService } from '../services/notifications-service';
 
 @Component({
   selector: 'app-home',
@@ -50,6 +51,7 @@ export class HomeComponent {
     private messageService: MessageService,
     private taskService: TaskService,
     private userService: UserService,
+    private notificationService: NotificationService,
     private fb: FormBuilder) {
     this.taskForm = this.fb.group({
       nome: ['', Validators.required],
@@ -105,7 +107,6 @@ export class HomeComponent {
         });
       }
     });
-    console.log(this.tasks);
   }
 
   getAllTasks(): void {
@@ -122,7 +123,6 @@ export class HomeComponent {
         });
       }
     });
-    console.log(this.tasks);
   }
 
   saveTask(): void {
@@ -155,7 +155,7 @@ export class HomeComponent {
     };
 
     if (this.isEditing) {
-      this.updateTask(updateTask);
+      this.updateTasks(updateTask);
     } else {
       this.addTask(newTask);
     }
@@ -195,12 +195,35 @@ export class HomeComponent {
   addUser(): void {
     this.addNewUser = !this.addNewUser;
     this.userForm.reset();
-    console.log(this.addNewUser);
+  }
+
+  notificationAlert(newTask: Task, message: string, subject?: string) {
+    const notificationPreference = this.getUserObject(newTask.usuarioId);
+    console.log(notificationPreference, newTask);
+
+    if (notificationPreference) {
+      if (notificationPreference?.notificationPreference === 'EMAIL') {
+        this.notificationService.notificationEmail(subject ? subject : '', message).subscribe({
+          next: (response: any) => {
+          },
+          error: (err: any) => {
+            console.error(err);
+          }
+        });
+      } else {
+        this.notificationService.notificationSMS(notificationPreference.telefone ? notificationPreference.telefone : '', message).subscribe({
+          next: (response: any) => {
+          },
+          error: (err: any) => {
+            console.error(err);
+          }
+        });
+      }
+    }
 
   }
 
   addTask(newTask: Task): void {
-
     if (!this.taskForm.value.nome.trim()) {
       this.messageService.add({
         severity: 'error',
@@ -212,65 +235,34 @@ export class HomeComponent {
 
     this.openModal();
 
-    console.log(this.isEditing, this.editingTaskId);
+    this.isAdding = true;
+    this.tasks.push(newTask);
 
-
-    if (this.isEditing && this.editingTaskId !== null) {
-      if (this.editingTaskId !== null) {
-        this.taskService.updateTask(newTask, this.editingTaskId).subscribe({
-          next: (response: any) => {
-            this.messageService.add({
-              severity: 'success',
-              detail: 'Tarefa editada com sucesso!',
-              key: 'tst',
-            });
-            const taskIndex = this.tasks.findIndex(task => task.id === this.editingTaskId);
-            this.tasks[taskIndex].nome = newTask.nome;
-            this.isEditing = false;
-            this.editingTaskId = null;
-            this.tasks = response;
-            this.getAllTasks();
-          },
-          error: (err: any) => {
-            console.error(err);
-            this.messageService.add({
-              severity: 'error',
-              detail: 'Um erro ocorreu ao editar a tarefa!',
-              key: 'tst',
-            });
-          }
+    this.taskService.addTask(newTask).subscribe({
+      next: (response: any) => {
+        this.messageService.add({
+          severity: 'success',
+          detail: 'Tarefa adicionada com sucesso!',
+          key: 'tst',
+        });
+        this.tasks = response;
+        this.getAllTasks();
+        this.notificationAlert(newTask, 'Sua tarefa foi adicionada com sucesso!', 'Tarefa adicionada com sucesso!');
+      },
+      error: (err: any) => {
+        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          detail: 'Um erro ocorreu ao adicionar a tarefa!',
+          key: 'tst',
         });
       }
-
-    } else {
-      this.isAdding = true;
-      this.tasks.push(newTask);
-
-      this.taskService.addTask(newTask).subscribe({
-        next: (response: any) => {
-          this.messageService.add({
-            severity: 'success',
-            detail: 'Tarefa adicionada com sucesso!',
-            key: 'tst',
-          });
-          this.tasks = response;
-          this.getAllTasks();
-        },
-        error: (err: any) => {
-          console.error(err);
-          this.messageService.add({
-            severity: 'error',
-            detail: 'Um erro ocorreu ao adicionar a tarefa!',
-            key: 'tst',
-          });
-        }
-      });
-    }
+    });
 
     this.taskName = '';
   }
 
-  updateTask(updatedTask: Task): void {
+  updateTasks(updatedTask: Task): void {
     this.taskService.updateTask(updatedTask, this.taskId).subscribe({
       next: () => {
         this.messageService.add({
@@ -280,7 +272,8 @@ export class HomeComponent {
         });
         this.getAllTasks();
         this.isEditing = false;
-        this.editingTaskId = null
+        this.editingTaskId = null;
+        this.notificationAlert(updatedTask, 'Sua tarefa foi editada com sucesso!', 'Tarefa editada com sucesso!');
       },
       error: (err: any) => {
         console.error(err);
@@ -323,15 +316,13 @@ export class HomeComponent {
       });
     }
 
-    console.log(this.taskForm);
-
     this.openModal();
   }
 
-  deleteTask(taskId: number): void {
+  deleteTask(task: Task): void {
 
-    if (taskId !== null) {
-      this.taskService.deleteTask(taskId).subscribe({
+    if (task.id !== null && task.id !== undefined) {
+      this.taskService.deleteTask(task.id).subscribe({
         next: (response: any) => {
           this.tasks = response;
           this.messageService.add({
@@ -341,6 +332,7 @@ export class HomeComponent {
           });
           this.tasks = response;
           this.getAllTasks();
+          this.notificationAlert(task, 'Sua tarefa foi deletada com sucesso!', 'Tarefa deletada com sucesso!');
         },
         error: (err: any) => {
           console.error(err);
@@ -362,8 +354,6 @@ export class HomeComponent {
 
   // Modal
   openModal(task?: Task): void {
-    console.log(task);
-
     this.isModalVisible = true;
     if (!this.isEditing) {
       this.taskForm.reset();
@@ -402,6 +392,10 @@ export class HomeComponent {
 
   getNameById(id: number) {
     return this.users.find(user => user.id === id)?.nome;
+  }
+
+  getUserObject(id: number) {
+    return this.users.find(user => user.id === id);
   }
 
 }
