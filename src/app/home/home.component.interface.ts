@@ -11,7 +11,7 @@ export interface Task {
 }
 
 export interface User {
-  id: number,
+  id?: number,
   nome: string;
   telefone: string | null,
   email: string,
