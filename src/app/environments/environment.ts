@@ -1,4 +1,5 @@
 export const environment = {
     urlBaseUsers: '/api/users',
-    urlBaseTasks: '/api/tasks'
+    urlBaseTasks: '/api/tasks',
+    urlBaseNotifications: '/api/notifications'
 }

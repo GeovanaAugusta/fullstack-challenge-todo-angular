@@ -21,5 +21,17 @@
     "pathRewrite": {
       "^/api/users": "/users"
     }
+  },
+  {
+    "context": [
+      "/api/notifications"
+    ],
+    "target": "http://18.225.156.94:8080/api",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/notifications": "/notifications"
+    }
   }
 ]
