@@ -18,4 +18,12 @@ export class UserService {
     allUsers(): Observable<any> {
         return this.http.get<any>(this.apiUrl);
     }
+
+    updateUser(task: any, id: number): Observable<any> {
+        return this.http.put<any>(`${this.apiUrl}/${id}`, task);
+    }
+
+    deleteUser(id: number): Observable<any> {
+        return this.http.delete<any>(`${this.apiUrl}/${id}`);
+    }
 }
