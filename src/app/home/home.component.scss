@@ -166,7 +166,8 @@ button {
     }
 }
 
-.btn {
+.btn,
+.btn-del {
     background-color: #0079bf;
     color: white;
     border: none;
@@ -187,16 +188,28 @@ button {
     width: 100%;
 }
 
-.btn:disabled {
+.btn:disabled,
+.btn-del:disabled {
     background-color: #a9a9a9;
     cursor: not-allowed;
     color: white;
 }
 
-.btn:disabled:hover {
+.btn:disabled:hover,
+.btn-del:disabled {
     background-color: #a9a9a9 !important;
     cursor: not-allowed;
     color: white;
+}
+
+.btn-del {
+    background-color: #bf0030;
+}
+
+.btn-del:hover {
+    background-color: #960428 !important;
+    color: white;
+    width: 100%;
 }
 
 .btn-add {
@@ -215,6 +228,24 @@ button {
     padding: 0px;
     text-align: left;
     margin-top: 0px;
+}
+
+.btn-delete {
+    border: none;
+    background: transparent;
+    color: #bf0030;
+    padding: 0px;
+    text-align: left;
+    margin-top: -10px;
+}
+
+.btn-delete:hover {
+    border: none;
+    background: transparent !important;
+    color: #960428;
+    padding: 0px;
+    text-align: left;
+    margin-top: -10px;
 }
 
 .btn-back {
