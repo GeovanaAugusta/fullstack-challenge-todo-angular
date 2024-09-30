@@ -227,7 +227,7 @@ export class HomeComponent {
   deleteUser(): void {
     this.deleteAUser = !this.deleteAUser;
   }
-  
+
 
 
   notificationAlert(newTask: Task, message: string, subject?: string) {
@@ -433,6 +433,7 @@ export class HomeComponent {
   cleanBooleans() {
     this.deleteAUser = false;
     this.addNewUser = false;
+    this.userId = 0;
   }
 
 }

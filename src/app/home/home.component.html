@@ -126,18 +126,20 @@
                 Atenção: A exclusão de um usuário é irreversível
             </h3>
 
-            <nz-select [(ngModel)]="userId" nzPlaceHolder="Selecione o usuário que deseja excluir" required>
+            <nz-select style="width: 100%; margin-bottom: 10px;" [(ngModel)]="userId"
+                nzPlaceHolder="Selecione o usuário que deseja excluir" required>
                 <nz-option *ngFor="let user of users" [nzValue]="user.id" [nzLabel]="user.nome"></nz-option>
             </nz-select>
 
             <div class="flex-jb">
-                <button class="btn" nz-button [disabled]="userId === 0" (click)="deleteUsers()">Excluir Usuário</button>
+                <button class="btn-del" nz-button [disabled]="userId === 0" (click)="deleteUsers()">Excluir
+                    Usuário</button>
                 <button class="btn-back" nz-button (click)="cleanBooleans()">Voltar</button>
             </div>
 
         </div>
 
-        
+
 
 
     </div>
