@@ -37,9 +37,11 @@ export class HomeComponent {
   isAdding: boolean = false;
   uploadSuccess: boolean = false;
   addNewUser: boolean = false;
+  deleteAUser: boolean = false;
   editingTaskId: number | null = null;
   isModalVisible: boolean = false;
   taskId: number = 0;
+  userId: number = 0;
   taskUsuarioId: number = 1;
   taskBegin: string = '';
   taskEnd: string = '';
@@ -192,10 +194,41 @@ export class HomeComponent {
 
   }
 
+  deleteUsers(): void {
+    console.log(this.userId);
+    this.userService.deleteUser(this.userId).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          detail: 'Usuário deletado com sucesso!',
+          key: 'tst',
+        });
+        this.getAllUsers();
+        this.userForm.reset();
+        this.deleteAUser = false;
+      },
+      error: (err: any) => {
+        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          detail: 'Um erro ocorreu ao deletar o usuário!',
+          key: 'tst',
+        });
+      }
+    });
+
+  }
+
   addUser(): void {
     this.addNewUser = !this.addNewUser;
     this.userForm.reset();
   }
+
+  deleteUser(): void {
+    this.deleteAUser = !this.deleteAUser;
+  }
+  
+
 
   notificationAlert(newTask: Task, message: string, subject?: string) {
     const notificationPreference = this.getUserObject(newTask.usuarioId);
@@ -320,7 +353,6 @@ export class HomeComponent {
   }
 
   deleteTask(task: Task): void {
-
     if (task.id !== null && task.id !== undefined) {
       this.taskService.deleteTask(task.id).subscribe({
         next: (response: any) => {
@@ -396,6 +428,11 @@ export class HomeComponent {
 
   getUserObject(id: number) {
     return this.users.find(user => user.id === id);
+  }
+
+  cleanBooleans() {
+    this.deleteAUser = false;
+    this.addNewUser = false;
   }
 
 }
