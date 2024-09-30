@@ -18,10 +18,12 @@
     <div class="modal-content">
         <span class="close" (click)="closeModal()">&times;</span>
         <h2 class="modal-title">{{ isEditing ? 'Editar Tarefa' : ((users && users.length === 0 || addNewUser) ?
-            'Adicionar Usuário' : 'Adicionar Tarefa') }}
+            'Adicionar Usuário' : ((users && users.length === 0 || deleteAUser)) ? 'Excluir Usuário' : 'Adicionar
+            Tarefa') }}
         </h2>
 
-        <form *ngIf="users && users.length > 0 && addNewUser === false" [formGroup]="taskForm" (ngSubmit)="saveTask()">
+        <form *ngIf="users && users.length > 0 && addNewUser === false && deleteAUser === false" [formGroup]="taskForm"
+            (ngSubmit)="saveTask()">
             <input type="text" nz-input formControlName="nome" placeholder="Nome da tarefa"
                 [ngClass]="{'invalid': taskForm.get('nome')?.invalid && taskForm.get('nome')?.touched}" required />
             <div class="invalid-message" *ngIf="taskForm.get('nome')?.invalid && taskForm.get('nome')?.touched">
@@ -72,6 +74,8 @@
             </div>
 
             <button class="btn-add" (click)="addUser()">+ Adicionar Usuário</button>
+            <button *ngIf="(users && users.length > 0)" class="btn-delete" (click)="deleteUser()">- Remover
+                Usuário</button>
             <button class="btn" nz-button [disabled]="taskForm.invalid">{{ isEditing ? 'Salvar Alterações' : 'Adicionar
                 Tarefa' }}</button>
         </form>
@@ -113,9 +117,27 @@
 
             <div class="flex-jb">
                 <button class="btn" nz-button [disabled]="userForm.invalid">Adicionar Usuário</button>
-                <button class="btn-back" nz-button (click)="addUser()">Voltar</button>
+                <button class="btn-back" nz-button (click)="cleanBooleans()">Voltar</button>
             </div>
         </form>
+
+        <div *ngIf="(users && users.length > 0 && deleteAUser)">
+            <h3 *ngIf="(users && users.length > 0)">
+                Atenção: A exclusão de um usuário é irreversível
+            </h3>
+
+            <nz-select [(ngModel)]="userId" nzPlaceHolder="Selecione o usuário que deseja excluir" required>
+                <nz-option *ngFor="let user of users" [nzValue]="user.id" [nzLabel]="user.nome"></nz-option>
+            </nz-select>
+
+            <div class="flex-jb">
+                <button class="btn" nz-button [disabled]="userId === 0" (click)="deleteUsers()">Excluir Usuário</button>
+                <button class="btn-back" nz-button (click)="cleanBooleans()">Voltar</button>
+            </div>
+
+        </div>
+
+        
 
 
     </div>
