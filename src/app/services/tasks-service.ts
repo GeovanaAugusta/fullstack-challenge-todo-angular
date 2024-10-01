@@ -31,4 +31,11 @@ export class TaskService {
     deleteTask(id: number): Observable<any> {
         return this.http.delete<any>(`${this.apiUrl}/${id}`);
     }
+
+    uploadFile(file: File): Observable<any> {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        return this.http.post<any>(`${this.apiUrl}/upload`, formData);
+    }
 }
