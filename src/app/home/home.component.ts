@@ -137,8 +137,24 @@ export class HomeComponent {
       return;
     }
 
-    let newTask: Task = {} as Task;
-    let updateTask: Task = {} as Task;
+    let newTask: Task = {
+      nome: this.taskForm.value.nome.trim(),
+      descricao: this.taskForm.value.descricao,
+      inicio: this.taskForm.value.inicio,
+      fim: this.taskForm.value.fim,
+      anexos: this.fileList.map(file => file.url).filter(url => url !== undefined) as string[],
+      usuarioId: this.taskForm.value.usuarioId,
+    };
+
+    let updateTask: Task = {
+      id: this.taskId,
+      nome: this.taskForm.value.nome.trim(),
+      descricao: this.taskForm.value.descricao,
+      inicio: this.taskForm.value.inicio,
+      fim: this.taskForm.value.fim,
+      anexos: this.fileList.map(file => file.url).filter(url => url !== undefined) as string[],
+      usuarioId: this.taskForm.value.usuarioId,
+    };
 
     if (this.fileList.length > 0 && this.fileList[0].originFileObj) {
       const file = this.fileList[0].originFileObj as File;
@@ -482,8 +498,8 @@ export class HomeComponent {
 
   getFileNameFromUrl(url: string): string {
     if (url) {
-      const fullName = url.substring(url.lastIndexOf('/') + 1); 
-      const underscoreIndex = fullName.indexOf('_'); 
+      const fullName = url.substring(url.lastIndexOf('/') + 1);
+      const underscoreIndex = fullName.indexOf('_');
       return underscoreIndex !== -1 ? fullName.substring(underscoreIndex + 1) : fullName;
     }
     return '';
