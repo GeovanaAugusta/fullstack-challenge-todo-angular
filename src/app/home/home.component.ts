@@ -50,7 +50,7 @@ export class HomeComponent {
   userForm: FormGroup;
 
   constructor(
-    private messageService: MessageService,
+    public messageService: MessageService,
     private taskService: TaskService,
     private userService: UserService,
     private notificationService: NotificationService,

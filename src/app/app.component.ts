@@ -10,5 +10,5 @@ import { HomeComponent } from './home/home.component';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'front-todo-list-challenge';
+  title = 'MyApp - Todo List';
 }
