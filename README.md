@@ -44,6 +44,21 @@ Siga as etapas abaixo para configurar e rodar a aplicação localmente:
 
 O frontend se comunicará com o backend através de um proxy configurado em `proxy.conf.json`.
 
+## Testes
+
+A aplicação utiliza testes unitários para garantir a qualidade e a funcionalidade do código. Os testes são realizados com as seguintes ferramentas:
+
+- **Jasmine**: Um framework de testes para JavaScript que fornece uma sintaxe clara e intuitiva para escrever testes.
+- **Karma**: Um executor de testes que permite rodar os testes em diferentes navegadores.
+
+### Como Executar os Testes
+
+Para rodar os testes, execute o seguinte comando:
+
+```bash
+npm test
+```
+
 ## Arquivo de Proxy
 
 A comunicação entre o frontend e o backend é realizada via proxy. O arquivo `proxy.conf.json` está configurado como abaixo:
