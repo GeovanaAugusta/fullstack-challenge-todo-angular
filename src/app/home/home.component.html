@@ -112,10 +112,14 @@
                 [ngClass]="{'invalid': userForm.get('telefone')?.invalid && userForm.get('telefone')?.touched}"
                 placeholder="Preencha com o telefone do usuário" />
 
-            <nz-radio-group formControlName="preference">
-                <label nz-radio nzValue="SMS">SMS</label>
-                <label nz-radio nzValue="EMAIL">E-mail</label>
-            </nz-radio-group>
+            <div>
+                <label style="margin-right: 15px;" for="notification-preference">Escolha por onde quer receber notificações:</label>
+                <nz-radio-group id="notification-preference" formControlName="preference">
+                    <label nz-radio nzValue="SMS">SMS</label>
+                    <label nz-radio nzValue="EMAIL">E-mail</label>
+                </nz-radio-group>
+            </div>
+
             <div class="invalid-message"
                 *ngIf="userForm.get('preference')?.invalid && userForm.get('preference')?.touched">
                 <small *ngIf="userForm.get('preference')?.errors?.['required']">Escolha uma preferência de
