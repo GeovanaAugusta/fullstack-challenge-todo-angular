@@ -46,7 +46,7 @@
             </div>
 
             <nz-upload nzType="drag" [nzMultiple]="false" (nzChange)="handleChange($event)"
-                nzAccept=".jpg,.jpeg,.png,.gif" [nzShowUploadList]="false" [nzFileList]="fileList"
+                nzAccept=".jpg,.jpeg,.png,.pdf" [nzShowUploadList]="false" [nzFileList]="fileList"
                 [ngClass]="{'invalid': taskForm.get('anexos')?.invalid && taskForm.get('anexos')?.touched}">
                 <p class="ant-upload-drag-icon">
                     <span nz-icon nzType="inbox"></span>
@@ -56,11 +56,18 @@
 
             <div class="invalid-message" *ngIf="fileList.length > 0" class="file-preview">
                 <div *ngFor="let file of fileList" class="file-item">
-                    <img width="80px" height="80px" *ngIf="file && file.type && file.type.startsWith('image/')"
-                        [src]="file.url || file.thumbUrl" alt="Preview" class="file-preview-image" />
-                    <span>{{ file.name }}</span>
-                    <button nz-button nzType="link" (click)="removeFile(file)"><i class="pi pi-trash"></i></button>
+                    <img width="30px" height="30px" *ngIf="file && file.type && file.type.startsWith('image/')"
+                        [src]="file.url || file.thumbUrl || file" alt="Preview" class="file-preview-image" />
+                    <span>{{ !isEditing ? file.name : getFileNameFromUrl(file.name) }}</span>
+                    <button class="btn-trash" nz-button nzType="link" (click)="removeFile(file)"><i
+                            class="pi pi-trash"></i></button>
+                    <div *ngIf="isEditing">
+                        <a style="padding: 0px !important;" [href]="file.url"
+                            download="{{ getFileNameFromUrl(file && file.url ? file.url : 'x') }}" nz-button
+                            nzType="link">Download do anexo</a>
+                    </div>
                 </div>
+
             </div>
 
             <nz-select formControlName="usuarioId" nzPlaceHolder="Selecione um usuário"

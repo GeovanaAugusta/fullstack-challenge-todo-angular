@@ -216,7 +216,6 @@ export class HomeComponent {
     }
   }
 
-
   saveUsers(): void {
     const newUser: User = {
       nome: this.userForm.value.nome.trim(),
@@ -479,6 +478,15 @@ export class HomeComponent {
 
   getUserObject(id: number) {
     return this.users.find(user => user.id === id);
+  }
+
+  getFileNameFromUrl(url: string): string {
+    if (url) {
+      console.log(url.substring(url.lastIndexOf('/') + 1));
+      const fullName = url.substring(url.lastIndexOf('/') + 1);
+      return fullName.substring(fullName.lastIndexOf('_') + 1);
+    }
+    return ''
   }
 
   cleanBooleans() {

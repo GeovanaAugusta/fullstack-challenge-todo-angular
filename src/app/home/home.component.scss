@@ -212,6 +212,22 @@ button {
     width: 100%;
 }
 
+.btn-trash {
+    background: transparent;
+    width: 30px;
+    height: 15px;
+    padding: 0px;
+    margin-top: 0px;
+}
+
+.btn-trash:hover {
+    background: transparent !important;
+    width: 30px;
+    height: 15px;
+    padding: 0px;
+    margin-top: 0px;
+}
+
 .btn-add {
     border: none;
     background: transparent;
