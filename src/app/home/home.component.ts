@@ -482,12 +482,13 @@ export class HomeComponent {
 
   getFileNameFromUrl(url: string): string {
     if (url) {
-      console.log(url.substring(url.lastIndexOf('/') + 1));
-      const fullName = url.substring(url.lastIndexOf('/') + 1);
-      return fullName.substring(fullName.lastIndexOf('_') + 1);
+      const fullName = url.substring(url.lastIndexOf('/') + 1); 
+      const underscoreIndex = fullName.indexOf('_'); 
+      return underscoreIndex !== -1 ? fullName.substring(underscoreIndex + 1) : fullName;
     }
-    return ''
+    return '';
   }
+
 
   cleanBooleans() {
     this.deleteAUser = false;
