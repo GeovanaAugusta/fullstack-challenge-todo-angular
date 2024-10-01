@@ -137,32 +137,85 @@ export class HomeComponent {
       return;
     }
 
-    const newTask: Task = {
-      nome: this.taskForm.value.nome.trim(),
-      descricao: this.taskForm.value.descricao,
-      inicio: this.taskForm.value.inicio,
-      fim: this.taskForm.value.fim,
-      anexos: this.fileList.map(file => file.url).filter(url => url !== undefined) as string[],
-      usuarioId: this.taskForm.value.usuarioId,
-    };
+    let newTask: Task = {} as Task;
+    let updateTask: Task = {} as Task;
 
-    const updateTask: Task = {
-      id: this.taskId,
-      nome: this.taskForm.value.nome.trim(),
-      descricao: this.taskForm.value.descricao,
-      inicio: this.taskForm.value.inicio,
-      fim: this.taskForm.value.fim,
-      anexos: this.fileList.map(file => file.url).filter(url => url !== undefined) as string[],
-      usuarioId: this.taskForm.value.usuarioId,
-    };
+    if (this.fileList.length > 0 && this.fileList[0].originFileObj) {
+      const file = this.fileList[0].originFileObj as File;
+      this.taskService.uploadFile(file).subscribe({
+        next: (uploadResponse) => {
+          const uploadedFileUrl = uploadResponse.fileUrl;
 
-    if (this.isEditing) {
-      this.updateTasks(updateTask);
+          newTask = {
+            nome: this.taskForm.value.nome.trim(),
+            descricao: this.taskForm.value.descricao,
+            inicio: this.taskForm.value.inicio,
+            fim: this.taskForm.value.fim,
+            anexos: [uploadedFileUrl],
+            usuarioId: this.taskForm.value.usuarioId,
+          };
+
+          updateTask = {
+            id: this.taskId,
+            nome: this.taskForm.value.nome.trim(),
+            descricao: this.taskForm.value.descricao,
+            inicio: this.taskForm.value.inicio,
+            fim: this.taskForm.value.fim,
+            anexos: [uploadedFileUrl],
+            usuarioId: this.taskForm.value.usuarioId,
+          };
+
+          if (this.isEditing) {
+            this.updateTasks(updateTask);
+          } else {
+            this.addTask(newTask);
+          }
+          this.closeModal();
+        },
+        error: (err) => {
+          const uploadedFileUrl = err.error.text;
+          console.log(uploadedFileUrl);
+
+          newTask = {
+            nome: this.taskForm.value.nome.trim(),
+            descricao: this.taskForm.value.descricao,
+            inicio: this.taskForm.value.inicio,
+            fim: this.taskForm.value.fim,
+            anexos: [uploadedFileUrl],
+            usuarioId: this.taskForm.value.usuarioId,
+          };
+
+          updateTask = {
+            id: this.taskId,
+            nome: this.taskForm.value.nome.trim(),
+            descricao: this.taskForm.value.descricao,
+            inicio: this.taskForm.value.inicio,
+            fim: this.taskForm.value.fim,
+            anexos: [uploadedFileUrl],
+            usuarioId: this.taskForm.value.usuarioId,
+          };
+
+
+          if (this.isEditing) {
+            this.updateTasks(updateTask);
+          } else {
+            this.addTask(newTask);
+          }
+          this.closeModal();
+        }
+      });
     } else {
-      this.addTask(newTask);
+
+
+      if (this.isEditing) {
+        this.updateTasks(updateTask);
+      } else {
+        this.addTask(newTask);
+      }
+      this.closeModal();
     }
-    this.closeModal();
   }
+
 
   saveUsers(): void {
     const newUser: User = {
@@ -227,8 +280,6 @@ export class HomeComponent {
   deleteUser(): void {
     this.deleteAUser = !this.deleteAUser;
   }
-
-
 
   notificationAlert(newTask: Task, message: string, subject?: string) {
     const notificationPreference = this.getUserObject(newTask.usuarioId);
