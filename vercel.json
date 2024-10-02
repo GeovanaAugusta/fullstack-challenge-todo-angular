@@ -1,37 +1,35 @@
-[
-    {
-      "context": [
-        "/api/tasks"
-      ],
-      "target": "http://18.230.82.81:8081/api",
-      "secure": false,
-      "changeOrigin": true,
-      "pathRewrite": {
-        "^/api/tasks": "/tasks"
-      }
-    },
-    {
-      "context": [
-        "/api/users"
-      ],
-      "target": "http://18.229.131.117:8080/api",
-      "secure": false,
-      "logLevel": "debug",
-      "changeOrigin": true,
-      "pathRewrite": {
-        "^/api/users": "/users"
-      }
-    },
-    {
-      "context": [
-        "/api/notifications"
-      ],
-      "target": "http://18.216.242.139:8080/api",
-      "secure": false,
-      "logLevel": "debug",
-      "changeOrigin": true,
-      "pathRewrite": {
-        "^/api/notifications": "/notifications"
-      }
-    }
-  ]
+{
+    "rewrites": [
+        {
+            "source": "/tasks/(.*)",
+            "destination": "http://18.230.82.81:8081/api/tasks/$1"
+        },
+        {
+            "source": "/users/(.*)",
+            "destination": "http://18.229.131.117:8080/api/users/$1"
+        },
+        {
+            "source": "/notifications/(.*)",
+            "destination": "http://18.216.242.139:8080/api/notifications/$1"
+        }
+    ],
+    "headers": [
+        {
+            "source": "/api/(.*)",
+            "headers": [
+                {
+                    "key": "Access-Control-Allow-Origin",
+                    "value": "*"
+                },
+                {
+                    "key": "Access-Control-Allow-Methods",
+                    "value": "GET, POST, PUT, DELETE, OPTIONS"
+                },
+                {
+                    "key": "Access-Control-Allow-Headers",
+                    "value": "Content-Type, Authorization"
+                }
+            ]
+        }
+    ]
+}
