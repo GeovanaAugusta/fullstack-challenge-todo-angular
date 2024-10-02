@@ -1,5 +1,8 @@
-{
-  "/api/tasks": {
+[
+  {
+    "context": [
+      "/api/tasks"
+    ],
     "target": "http://18.230.82.81:8081/api",
     "secure": false,
     "changeOrigin": true,
@@ -7,20 +10,28 @@
       "^/api/tasks": "/tasks"
     }
   },
-  "/api/users": {
+  {
+    "context": [
+      "/api/users"
+    ],
     "target": "http://18.229.131.117:8080/api",
     "secure": false,
+    "logLevel": "debug",
     "changeOrigin": true,
     "pathRewrite": {
       "^/api/users": "/users"
     }
   },
-  "/api/notifications": {
+  {
+    "context": [
+      "/api/notifications"
+    ],
     "target": "http://18.216.242.139:8080/api",
     "secure": false,
+    "logLevel": "debug",
     "changeOrigin": true,
     "pathRewrite": {
       "^/api/notifications": "/notifications"
     }
   }
-}
+]
