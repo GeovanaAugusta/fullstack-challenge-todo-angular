@@ -25,12 +25,21 @@ export class TaskService {
     }
 
     updateTask(task: any, id: number): Observable<any> {
-        return this.http.put<any>(`${this.apiUrl}/${id}`, task);
+        return this.http.put<any>(`${this.apiUrl}/${id}`, task, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
     }
 
     deleteTask(id: number): Observable<any> {
-        return this.http.delete<any>(`${this.apiUrl}/${id}`);
+        return this.http.delete<any>(`${this.apiUrl}/${id}`, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
     }
+
 
     uploadFile(file: File): Observable<any> {
         const formData = new FormData();
