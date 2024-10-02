@@ -23,6 +23,10 @@
         {
             "source": "/api/notifications/:id",
             "destination": "http://18.216.242.139:8080/api/notifications/:id"
+        },
+        {
+            "source": "/api/notifications/email",
+            "destination": "http://18.216.242.139:8080/api/notifications/email"
         }
     ]
 }
