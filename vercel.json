@@ -1,21 +1,21 @@
 {
     "rewrites": [
         {
-            "source": "/tasks/(.*)",
-            "destination": "http://18.230.82.81:8081/api/tasks/$1"
+            "source": "api/tasks",
+            "destination": "http://18.230.82.81:8081/api"
         },
         {
-            "source": "/users/(.*)",
-            "destination": "http://18.229.131.117:8080/api/users/$1"
+            "source": "api/users",
+            "destination": "http://18.229.131.117:8080/api"
         },
         {
-            "source": "/notifications/(.*)",
-            "destination": "http://18.216.242.139:8080/api/notifications/$1"
+            "source": "api/notifications",
+            "destination": "http://18.216.242.139:8080/api"
         }
     ],
     "headers": [
         {
-            "source": "/api/(.*)",
+            "source": "/api/",
             "headers": [
                 {
                     "key": "Access-Control-Allow-Origin",
