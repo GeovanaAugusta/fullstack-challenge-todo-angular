@@ -13,7 +13,7 @@
             "destination": "http://18.229.131.117:8080/api/users"
         },
         {
-            "source": "/api/users/:id",
+            "source": "/api/users/:id(.*)",
             "destination": "http://18.229.131.117:8080/api/users/:id"
         },
         {
@@ -21,7 +21,7 @@
             "destination": "http://18.216.242.139:8080/api/notifications"
         },
         {
-            "source": "/api/notifications/:id",
+            "source": "/api/notifications/:id(.*)",
             "destination": "http://18.216.242.139:8080/api/notifications/:id"
         },
         {
