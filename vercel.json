@@ -5,8 +5,8 @@
             "destination": "http://18.230.82.81:8081/api/tasks"
         },
         {
-            "source": "/api/tasks/:id",
-            "destination": "http://18.230.82.81:8081/api/tasks/"
+            "source": "/api/tasks/:id(.*)",
+            "destination": "http://18.230.82.81:8081/api/tasks/:id"
         },
         {
             "source": "/api/users",
