@@ -431,6 +431,9 @@ export class HomeComponent {
           this.tasks = response;
           this.getAllTasks();
           this.notificationAlert(task, 'Sua tarefa foi deletada com sucesso!', 'Tarefa deletada com sucesso!');
+          this.taskForm.patchValue({
+            usuarioId: null
+          });
         },
         error: (err: any) => {
           console.error(err);
